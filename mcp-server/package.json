@@ -1,0 +1,13 @@
+{
+  "name": "devs-memory-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for Dev's Memory",
+  "main": "index.js",
+  "type": "commonjs",
+  "bin": {
+    "devs-memory-mcp": "./index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}

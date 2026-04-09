@@ -39,6 +39,7 @@ export default function App() {
       />
       <CommandList
         category={selectedCategory}
+        allCategories={categories}
         onAdd={addCommand}
         onUpdate={updateCommand}
         onDelete={deleteCommand}

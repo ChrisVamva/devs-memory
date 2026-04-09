@@ -34,6 +34,36 @@ export default function GameBoy() {
 
   return (
     <>
+      {/* Logo button */}
+      <div
+        className="ot-logo-btn"
+        title="orange-tomato.com"
+        onClick={async () => {
+          if (window.electronAPI?.openUrl) {
+            await window.electronAPI.openUrl('https://orange-tomato.com/')
+          } else {
+            window.open('https://orange-tomato.com/', '_blank')
+          }
+        }}
+      >
+        <img src="/ot-logo.svg" alt="Orange Tomato" />
+      </div>
+
+      {/* GitHub button */}
+      <div
+        className="ot-logo-btn github-btn"
+        title="GitHub"
+        onClick={async () => {
+          if (window.electronAPI?.openUrl) {
+            await window.electronAPI.openUrl('https://github.com/')
+          } else {
+            window.open('https://github.com/', '_blank')
+          }
+        }}
+      >
+        <img src="/github.svg" alt="GitHub" />
+      </div>
+
       {/* Minimised pill */}
       {minimised ? (
         <div className="gb-pill" onClick={() => setMinimised(false)} title="Restore Game Boy">

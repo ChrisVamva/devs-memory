@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import CommandCard from './CommandCard'
 import NoteModal from './NoteModal'
+import TreeView from './TreeView'
 
-export default function CommandList({ category, onAdd, onUpdate, onDelete, onSaveNote }) {
+export default function CommandList({ category, onAdd, onUpdate, onDelete, onSaveNote, allCategories }) {
   const [adding, setAdding] = useState(false)
   const [label, setLabel] = useState('')
   const [value, setValue] = useState('')
   const [noteOpen, setNoteOpen] = useState(false)
+  const [treeView, setTreeView] = useState(false)
 
   function handleAdd() {
     if (label.trim() && value.trim()) {
@@ -44,6 +46,13 @@ export default function CommandList({ category, onAdd, onUpdate, onDelete, onSav
           >
             📓
           </button>
+          <button
+            className="notebook-icon-btn"
+            title={treeView ? 'Card view' : 'Tree view'}
+            onClick={() => setTreeView(v => !v)}
+          >
+            {treeView ? '▦' : '🌿'}
+          </button>
         </div>
         <button className="add-command-btn" onClick={() => setAdding(true)}>+ Add Command</button>
       </div>
@@ -69,21 +78,25 @@ export default function CommandList({ category, onAdd, onUpdate, onDelete, onSav
         </div>
       )}
 
-      <div className="cards-grid">
-        {category.commands.length === 0 && !adding && (
-          <p className="no-commands">No commands yet. Hit "+ Add Command" to start.</p>
-        )}
-        {category.commands.map(cmd => (
-          <CommandCard
-            key={cmd.id}
-            command={cmd}
-            categoryId={category.id}
-            contentStyle={category.contentStyle || {}}
-            onUpdate={onUpdate}
-            onDelete={onDelete}
-          />
-        ))}
-      </div>
+      {treeView ? (
+        <TreeView categories={allCategories || [category]} />
+      ) : (
+        <div className="cards-grid">
+          {category.commands.length === 0 && !adding && (
+            <p className="no-commands">No commands yet. Hit "+ Add Command" to start.</p>
+          )}
+          {category.commands.map(cmd => (
+            <CommandCard
+              key={cmd.id}
+              command={cmd}
+              categoryId={category.id}
+              contentStyle={category.contentStyle || {}}
+              onUpdate={onUpdate}
+              onDelete={onDelete}
+            />
+          ))}
+        </div>
+      )}
 
       {noteOpen && (
         <NoteModal
