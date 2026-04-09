@@ -1,6 +1,6 @@
-const { contextBridge } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron')
 
-// Expose safe APIs to renderer here as needed
 contextBridge.exposeInMainWorld('electronAPI', {
-  platform: process.platform
+  platform: process.platform,
+  getSystemStats: () => ipcRenderer.invoke('get-system-stats')
 })
