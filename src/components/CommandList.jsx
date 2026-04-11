@@ -3,7 +3,7 @@ import CommandCard from './CommandCard'
 import NoteModal from './NoteModal'
 import TreeView from './TreeView'
 
-export default function CommandList({ category, onAdd, onUpdate, onDelete, onSaveNote, allCategories }) {
+export default function CommandList({ category, onAdd, onUpdate, onDelete, onSaveNote, onApprove, allCategories }) {
   const [adding, setAdding] = useState(false)
   const [label, setLabel] = useState('')
   const [value, setValue] = useState('')
@@ -93,6 +93,7 @@ export default function CommandList({ category, onAdd, onUpdate, onDelete, onSav
               contentStyle={category.contentStyle || {}}
               onUpdate={onUpdate}
               onDelete={onDelete}
+              onApprove={onApprove}
             />
           ))}
         </div>

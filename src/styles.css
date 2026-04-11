@@ -1147,3 +1147,62 @@ body.dark .github-btn img {
   min-width: 100%;
   min-height: 100%;
 }
+
+/* ── AI Inbox / Pending cards ── */
+.command-card.pending {
+  border-color: #d4c4e8;
+  border-style: dashed;
+  background: #d4c4e822;
+}
+
+.pending-badge {
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #7a5c9a;
+  background: #d4c4e855;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.pending-reason {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.pending-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-approve {
+  background: #7a9e6a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-family: 'Caveat', cursive;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── Import / Export modal ── */
+.ie-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ie-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-family: 'Caveat', cursive;
+  line-height: 1.4;
+}
+
+.ie-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 12px 0;
+}

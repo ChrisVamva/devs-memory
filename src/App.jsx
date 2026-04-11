@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Sidebar from './components/Sidebar'
 import CommandList from './components/CommandList'
 import GameBoy from './components/GameBoy'
+import ImportExport from './components/ImportExport'
 import { useStore } from './hooks/useStore'
 
 export default function App() {
-  const { categories, addCategory, renameCategory, deleteCategory, styleCategory, updateNote, addCommand, updateCommand, deleteCommand } = useStore()
+  const { categories, addCategory, renameCategory, deleteCategory, styleCategory, updateNote, approveCommand, importData, addCommand, updateCommand, deleteCommand } = useStore()
   const [selectedId, setSelectedId] = useState(categories[0]?.id || null)
   const [dark, setDark] = useState(() => localStorage.getItem('devs-memory-theme') === 'dark')
+  const [showIE, setShowIE] = useState(false)
 
   useEffect(() => {
     document.body.classList.toggle('dark', dark)
@@ -36,6 +38,7 @@ export default function App() {
         onStyle={styleCategory}
         dark={dark}
         onToggleDark={() => setDark(d => !d)}
+        onImportExport={() => setShowIE(true)}
       />
       <CommandList
         category={selectedCategory}
@@ -44,8 +47,16 @@ export default function App() {
         onUpdate={updateCommand}
         onDelete={deleteCommand}
         onSaveNote={updateNote}
+        onApprove={cmd => approveCommand(selectedCategory.id, cmd.id, cmd.suggestedCategory)}
       />
       <GameBoy />
+      {showIE && (
+        <ImportExport
+          categories={categories}
+          onImport={importData}
+          onClose={() => setShowIE(false)}
+        />
+      )}
     </div>
   )
 }

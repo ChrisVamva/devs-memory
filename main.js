@@ -1,4 +1,4 @@
-const { app, BrowserWindow, session, ipcMain, shell } = require('electron')
+const { app, BrowserWindow, session, ipcMain, shell, globalShortcut } = require('electron')
 const path = require('path')
 const fs = require('fs')
 const os = require('os')
@@ -45,6 +45,45 @@ function createWindow() {
   }
 
   win.webContents.once('did-finish-load', () => startWatcher(win))
+}
+
+// ── Spotlight window ──
+let spotlightWin = null
+
+function openSpotlight() {
+  if (spotlightWin && !spotlightWin.isDestroyed()) {
+    spotlightWin.focus()
+    return
+  }
+  spotlightWin = new BrowserWindow({
+    width: 520,
+    height: 380,
+    frame: false,
+    transparent: true,
+    alwaysOnTop: true,
+    resizable: false,
+    skipTaskbar: true,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload-spotlight.js'),
+      contextIsolation: true,
+      nodeIntegration: false
+    }
+  })
+  spotlightWin.loadFile(path.join(__dirname, 'spotlight.html'))
+  spotlightWin.on('blur', () => { if (spotlightWin) spotlightWin.close() })
+  spotlightWin.on('closed', () => { spotlightWin = null })
+
+  // Send data once loaded
+  spotlightWin.webContents.once('did-finish-load', () => {
+    const data = readData() || []
+    const commands = []
+    data.forEach(cat => {
+      cat.commands?.forEach(cmd => {
+        commands.push({ label: cmd.label, value: cmd.value, category: cat.name })
+      })
+    })
+    spotlightWin.webContents.send('spotlight-data', commands)
+  })
 }
 
 app.whenReady().then(() => {
@@ -102,9 +141,13 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+
+  globalShortcut.register('CommandOrControl+Shift+M', openSpotlight)
+  ipcMain.on('spotlight-close', () => { if (spotlightWin) spotlightWin.close() })
 })
 
 app.on('window-all-closed', () => {
+  globalShortcut.unregisterAll()
   if (process.platform !== 'darwin') app.quit()
 })
 

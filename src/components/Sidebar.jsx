@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import StyleModal from './StyleModal'
 
-export default function Sidebar({ categories, selected, onSelect, onAdd, onRename, onDelete, onStyle, dark, onToggleDark }) {
+export default function Sidebar({ categories, selected, onSelect, onAdd, onRename, onDelete, onStyle, dark, onToggleDark, onImportExport }) {
   const [newName, setNewName] = useState('')
   const [editingId, setEditingId] = useState(null)
   const [editValue, setEditValue] = useState('')
@@ -101,6 +101,7 @@ export default function Sidebar({ categories, selected, onSelect, onAdd, onRenam
           </div>
         ) : (
           <button className="add-category-btn" onClick={() => setAdding(true)}>+ New Category</button>
+        <button className="add-category-btn" style={{ marginTop: 4 }} onClick={onImportExport}>⇅ Import / Export</button>
         )}
       </div>
 

@@ -95,7 +95,38 @@ export function useStore() {
     update(prev => prev.map(c => c.id === categoryId ? { ...c, note } : c))
   }
 
-  function addCommand(categoryId, label, value) {
+  function importData(incoming) {
+    update(prev => {
+      const merged = [...prev]
+      incoming.forEach(cat => {
+        const existing = merged.find(c => c.name.toLowerCase() === cat.name.toLowerCase())
+        if (existing) {
+          cat.commands?.forEach(cmd => {
+            if (!existing.commands.find(c => c.label === cmd.label)) {
+              existing.commands.push({ ...cmd, id: uid() })
+            }
+          })
+        } else {
+          merged.push({ ...cat, id: uid() })
+        }
+      })
+      return merged
+    })
+  }
+    update(prev => {
+      const data = prev.map(c => ({ ...c, commands: [...c.commands] }))
+      const inbox = data.find(c => c.id === categoryId)
+      const cmd   = inbox?.commands.find(c => c.id === commandId)
+      if (!cmd) return prev
+      inbox.commands = inbox.commands.filter(c => c.id !== commandId)
+      const { pending, suggestedCategory, reason, ...cleanCmd } = cmd
+      const targetName = targetCategoryName || suggestedCategory
+      let target = targetName ? data.find(c => c.name.toLowerCase() === targetName.toLowerCase()) : null
+      if (!target) target = inbox // fallback: keep in inbox as approved
+      target.commands.push(cleanCmd)
+      return data
+    })
+  }
     update(prev => prev.map(c =>
       c.id === categoryId
         ? { ...c, commands: [...c.commands, { id: uid(), label, value }] }
@@ -122,6 +153,6 @@ export function useStore() {
   return {
     categories,
     addCategory, renameCategory, deleteCategory, styleCategory, updateNote,
-    addCommand, updateCommand, deleteCommand
+    approveCommand, importData, addCommand, updateCommand, deleteCommand
   }
 }

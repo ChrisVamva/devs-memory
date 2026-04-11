@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-export default function CommandCard({ command, categoryId, contentStyle = {}, onUpdate, onDelete }) {
+export default function CommandCard({ command, categoryId, contentStyle = {}, onUpdate, onDelete, onApprove }) {
   const [copied, setCopied] = useState(false)
   const [editing, setEditing] = useState(false)
   const [label, setLabel] = useState(command.label)
@@ -50,21 +50,34 @@ export default function CommandCard({ command, categoryId, contentStyle = {}, on
   }
 
   return (
-    <div className="command-card" style={{
+    <div className={`command-card ${command.pending ? 'pending' : ''}`} style={{
       borderColor: contentStyle.color || undefined,
       background: contentStyle.color ? `${contentStyle.color}33` : undefined
     }}>
+      {command.pending && (
+        <div className="pending-badge">
+          🤖 AI suggestion{command.suggestedCategory ? ` → ${command.suggestedCategory}` : ''}
+        </div>
+      )}
+      {command.reason && <div className="pending-reason">{command.reason}</div>}
       <div className="card-header">
         <span className="card-label" style={{ fontFamily: contentStyle.font || undefined }}>{command.label}</span>
         <div className="card-actions">
-          <button title="Edit" onClick={() => setEditing(true)}>✏️</button>
+          {!command.pending && <button title="Edit" onClick={() => setEditing(true)}>✏️</button>}
           <button title="Delete" onClick={() => onDelete(categoryId, command.id)}>🗑️</button>
         </div>
       </div>
       <code className="card-value">{command.value}</code>
-      <button className={`copy-btn ${copied ? 'copied' : ''}`} onClick={handleCopy}>
-        {copied ? '✓ Copied' : 'Copy'}
-      </button>
+      {command.pending ? (
+        <div className="pending-actions">
+          <button className="btn-approve" onClick={() => onApprove && onApprove(command)}>✓ Approve</button>
+          <button className="btn-cancel" onClick={() => onDelete(categoryId, command.id)}>✕ Dismiss</button>
+        </div>
+      ) : (
+        <button className={`copy-btn ${copied ? 'copied' : ''}`} onClick={handleCopy}>
+          {copied ? '✓ Copied' : 'Copy'}
+        </button>
+      )}
     </div>
   )
 }

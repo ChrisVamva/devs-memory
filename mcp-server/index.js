@@ -88,7 +88,19 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       }
     },
     {
-      name: 'delete_category',
+      name: 'suggest_command',
+      description: "Suggest a command for the user to review in the AI Inbox (pending approval)",
+      inputSchema: {
+        type: 'object',
+        properties: {
+          label:    { type: 'string', description: 'Short label for the command' },
+          value:    { type: 'string', description: 'The actual command string' },
+          category: { type: 'string', description: 'Suggested category (optional)' },
+          reason:   { type: 'string', description: 'Why this command is useful (optional)' }
+        },
+        required: ['label', 'value']
+      }
+    },
       description: "Delete an entire category",
       inputSchema: {
         type: 'object',
@@ -156,6 +168,24 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
     if (cat.commands.length === before) return text(`Command "${args.label}" not found.`)
     write(data)
     return text(`Deleted "${args.label}" from ${cat.name}.`)
+  }
+
+  if (name === 'suggest_command') {
+    let inbox = data.find(c => c.inbox === true)
+    if (!inbox) {
+      inbox = { id: uid(), name: '📥 AI Inbox', commands: [], style: { color: '#d4c4e8' }, note: '', inbox: true }
+      data.push(inbox)
+    }
+    inbox.commands.push({
+      id: uid(),
+      label: args.label,
+      value: args.value,
+      pending: true,
+      suggestedCategory: args.category || null,
+      reason: args.reason || null
+    })
+    write(data)
+    return text(`Suggested "${args.label}" — added to AI Inbox for review.`)
   }
 
   if (name === 'delete_category') {
