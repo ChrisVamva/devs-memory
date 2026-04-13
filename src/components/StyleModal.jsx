@@ -51,7 +51,7 @@ export default function StyleModal({ category, onApply, onClose }) {
                   border: color ? 'none' : '1px dashed #b0a090',
                   borderRadius: '6px',
                   padding: '4px 14px',
-                  fontSize: '20px',
+                  fontSize: '24px',
                   color: '#3d2e1a',
                 }}
               >
