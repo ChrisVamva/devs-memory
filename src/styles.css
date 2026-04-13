@@ -81,8 +81,8 @@ body {
 
 /* ── Sidebar ── */
 .sidebar {
-  width: 180px;
-  min-width: 180px;
+  width: 210px;
+  min-width: 210px;
   background: var(--bg-sidebar);
   border-right: 2px solid var(--border);
   display: flex;
@@ -116,7 +116,7 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   padding: 2px;
   -webkit-app-region: no-drag;
   opacity: 0.7;
@@ -129,7 +129,7 @@ body {
 }
 
 .app-title {
-  font-size: 16px;
+  font-size: 19px;
   font-weight: 600;
   color: var(--accent);
   letter-spacing: 0.02em;
@@ -168,7 +168,7 @@ body {
 
 .category-name {
   flex: 1;
-  font-size: 15px;
+  font-size: 17px;
   color: var(--text-heading);
   white-space: nowrap;
   overflow: hidden;
@@ -176,7 +176,7 @@ body {
 }
 
 .category-count {
-  font-size: 11px;
+  font-size: 13px;
   font-family: 'JetBrains Mono', monospace;
   color: var(--text-muted);
   background: var(--count-bg);
@@ -198,7 +198,7 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 13px;
   padding: 1px 3px;
   border-radius: 3px;
   opacity: 0.5;
@@ -216,7 +216,7 @@ body {
   border: none;
   border-bottom: 1px solid var(--accent);
   color: var(--text);
-  font-size: 15px;
+  font-size: 17px;
   font-family: 'Caveat', cursive;
   padding: 1px 4px;
   outline: none;
@@ -232,10 +232,10 @@ body {
   background: none;
   border: 1px dashed var(--text-dim);
   color: var(--text-muted);
-  padding: 6px;
+  padding: 8px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 15px;
   font-family: 'Caveat', cursive;
   transition: all 0.15s;
 }
@@ -256,7 +256,7 @@ body {
   border: none;
   border-bottom: 1px solid var(--accent);
   color: var(--text);
-  font-size: 14px;
+  font-size: 16px;
   font-family: 'Caveat', cursive;
   padding: 4px 6px;
   outline: none;
@@ -267,8 +267,8 @@ body {
   color: var(--bg-card);
   border: none;
   border-radius: 4px;
-  padding: 4px 10px;
-  font-size: 13px;
+  padding: 5px 12px;
+  font-size: 15px;
   font-family: 'Caveat', cursive;
   font-weight: 600;
   cursor: pointer;
@@ -289,7 +289,7 @@ body {
   align-items: center;
   justify-content: center;
   color: var(--text-dim);
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .command-list-header {
@@ -302,7 +302,7 @@ body {
 }
 
 .command-list-header h2 {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 600;
   color: var(--text-heading);
 }
@@ -312,8 +312,8 @@ body {
   color: var(--accent);
   border: 1px solid var(--text-dim);
   border-radius: 4px;
-  padding: 3px 10px;
-  font-size: 13px;
+  padding: 4px 12px;
+  font-size: 15px;
   font-family: 'Caveat', cursive;
   cursor: pointer;
   transition: all 0.15s;
@@ -343,7 +343,7 @@ body {
   border: none;
   border-bottom: 1px solid var(--border);
   color: var(--text);
-  font-size: 14px;
+  font-size: 16px;
   font-family: 'Caveat', cursive;
   padding: 4px 2px;
   outline: none;
@@ -352,7 +352,7 @@ body {
 
 .add-command-form textarea {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .add-command-form input:focus,
@@ -370,8 +370,8 @@ body {
   color: var(--bg-card);
   border: none;
   border-radius: 4px;
-  padding: 4px 14px;
-  font-size: 13px;
+  padding: 5px 16px;
+  font-size: 15px;
   font-family: 'Caveat', cursive;
   font-weight: 600;
   cursor: pointer;
@@ -382,8 +382,8 @@ body {
   color: var(--text-muted);
   border: 1px solid var(--border);
   border-radius: 4px;
-  padding: 4px 14px;
-  font-size: 13px;
+  padding: 5px 16px;
+  font-size: 15px;
   font-family: 'Caveat', cursive;
   cursor: pointer;
 }
@@ -402,7 +402,7 @@ body {
 
 .no-commands {
   color: var(--text-dim);
-  font-size: 15px;
+  font-size: 17px;
   grid-column: 1 / -1;
   padding-top: 6px;
 }
@@ -435,7 +435,7 @@ body {
 }
 
 .card-label {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--text-heading);
 }
@@ -453,14 +453,14 @@ body {
 
 .card-value {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-code);
   background: var(--bg-code);
-  padding: 6px 8px;
+  padding: 8px 10px;
   border-radius: 4px;
   word-break: break-all;
   white-space: pre-wrap;
-  line-height: 1.5;
+  line-height: 1.6;
   border-left: 2px solid var(--text-dim);
 }
 
@@ -470,8 +470,8 @@ body {
   border: 1px solid var(--border);
   color: var(--text-muted);
   border-radius: 4px;
-  padding: 2px 10px;
-  font-size: 12px;
+  padding: 3px 12px;
+  font-size: 14px;
   font-family: 'Caveat', cursive;
   cursor: pointer;
   transition: all 0.15s;
@@ -493,7 +493,7 @@ body {
   border: none;
   border-bottom: 1px solid var(--border);
   color: var(--text);
-  font-size: 14px;
+  font-size: 16px;
   font-family: 'Caveat', cursive;
   padding: 3px 2px;
   outline: none;
@@ -502,7 +502,7 @@ body {
 
 .card-value-input {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .card-label-input:focus,
@@ -549,7 +549,7 @@ body {
 }
 
 .modal-title {
-  font-size: 18px;
+  font-size: 22px;
   font-family: 'Caveat', cursive;
   font-weight: 600;
   color: var(--text-heading);
@@ -569,7 +569,7 @@ body {
 }
 
 .modal-label {
-  font-size: 11px;
+  font-size: 13px;
   font-family: 'JetBrains Mono', monospace;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -610,8 +610,8 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 4px;
-  padding: 6px 8px;
-  font-size: 14px;
+  padding: 8px 10px;
+  font-size: 16px;
   color: var(--text-heading);
   cursor: pointer;
   text-align: center;
@@ -638,7 +638,7 @@ body {
 }
 
 .confirm-text {
-  font-size: 15px;
+  font-size: 17px;
   font-family: 'Caveat', cursive;
   color: var(--text-heading);
   line-height: 1.5;
@@ -686,7 +686,7 @@ body {
 }
 
 .pending-badge {
-  font-size: 11px;
+  font-size: 13px;
   font-family: 'JetBrains Mono', monospace;
   color: #7a5c9a;
   background: #d4c4e855;
@@ -695,7 +695,7 @@ body {
 }
 
 .pending-reason {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
   font-style: italic;
 }
@@ -710,8 +710,8 @@ body {
   color: #fff;
   border: none;
   border-radius: 4px;
-  padding: 4px 12px;
-  font-size: 13px;
+  padding: 5px 14px;
+  font-size: 15px;
   font-family: 'Caveat', cursive;
   font-weight: 600;
   cursor: pointer;
@@ -744,14 +744,14 @@ body {
 }
 
 .dashboard-section .dash-label {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text-heading);
   margin-bottom: 4px;
 }
 
 .dashboard-section .dash-value {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-code);
   background: var(--bg-code);
   padding: 4px 8px;
@@ -772,8 +772,8 @@ body {
   background: none;
   border: 1px solid var(--border);
   border-radius: 5px;
-  padding: 4px 6px;
-  font-size: 12px;
+  padding: 5px 8px;
+  font-size: 14px;
   font-family: 'Caveat', cursive;
   color: var(--text-muted);
   cursor: pointer;
@@ -789,14 +789,14 @@ body {
 
 /* ── Shortcut cards ── */
 .shortcut-card .card-label {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .shortcut-state-select {
   border: none;
   border-radius: 4px;
-  padding: 2px 6px;
-  font-size: 11px;
+  padding: 3px 8px;
+  font-size: 13px;
   font-family: 'Caveat', cursive;
   cursor: pointer;
   outline: none;
@@ -806,8 +806,8 @@ body {
   background: none;
   border: 1px solid var(--border);
   border-radius: 4px;
-  padding: 3px 8px;
-  font-size: 12px;
+  padding: 4px 10px;
+  font-size: 14px;
   font-family: 'Caveat', cursive;
   color: var(--text-muted);
   cursor: pointer;

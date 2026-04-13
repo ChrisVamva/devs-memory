@@ -87,13 +87,13 @@ export default function ShortcutsView({ shortcuts, tools, onAdd, onUpdate, onDel
             placeholder="Keys (e.g. Ctrl + Shift + P)"
             value={newKeys}
             onChange={e => setNewKeys(e.target.value)}
-            style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '13px' }}
+            style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '15px' }}
           />
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <select
               value={newTool}
               onChange={e => setNewTool(e.target.value)}
-              style={{ flex: 1, background: 'var(--bg-code)', border: '1px solid var(--border)', borderRadius: 6, padding: '5px 8px', fontFamily: "'Caveat', cursive", fontSize: '14px', color: 'var(--text)' }}
+              style={{ flex: 1, background: 'var(--bg-code)', border: '1px solid var(--border)', borderRadius: 6, padding: '6px 10px', fontFamily: "'Caveat', cursive", fontSize: '16px', color: 'var(--text)' }}
             >
               {tools.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
@@ -106,7 +106,7 @@ export default function ShortcutsView({ shortcuts, tools, onAdd, onUpdate, onDel
                     autoFocus
                     onChange={e => setNewToolName(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter') handleAddTool(); if (e.key === 'Escape') setAddingTool(false) }}
-                    style={{ width: 100, padding: '4px 6px', border: '1px solid var(--border)', borderRadius: 4, background: 'var(--bg-card)', fontFamily: "'Caveat', cursive", fontSize: '13px', color: 'var(--text)' }}
+                    style={{ width: 110, padding: '5px 8px', border: '1px solid var(--border)', borderRadius: 4, background: 'var(--bg-card)', fontFamily: "'Caveat', cursive", fontSize: '15px', color: 'var(--text)' }}
                   />
                   <button className="btn-save" onClick={handleAddTool}>Add</button>
                 </div>
@@ -123,7 +123,7 @@ export default function ShortcutsView({ shortcuts, tools, onAdd, onUpdate, onDel
         {/* Favorites strip */}
         {favorites.length > 0 && selectedTool === 'all' && !search && (
           <div style={{ marginBottom: 16 }}>
-            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: 6, fontFamily: "'JetBrains Mono', monospace" }}>⭐ Favourites</p>
+            <p style={{ fontSize: '15px', color: 'var(--text-muted)', marginBottom: 6, fontFamily: "'JetBrains Mono', monospace" }}>⭐ Favourites</p>
             <div className="cards-grid">
               {favorites.map(s => (
                 <ShortcutCard key={s.id} shortcut={s} onUpdate={onUpdate} onDelete={onDelete} onToggleFavorite={onToggleFavorite} onSetState={onSetState} />
@@ -137,10 +137,10 @@ export default function ShortcutsView({ shortcuts, tools, onAdd, onUpdate, onDel
           Object.entries(byTool).map(([tool, group]) => (
             <div key={tool} style={{ marginBottom: 20 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                <p style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-heading)', fontFamily: "'Caveat', cursive" }}>{tool}</p>
+                <p style={{ fontSize: '17px', fontWeight: 600, color: 'var(--text-heading)', fontFamily: "'Caveat', cursive" }}>{tool}</p>
                 <button
                   onClick={() => onDeleteTool(tool)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '11px', color: 'var(--text-dim)', opacity: 0.5 }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '13px', color: 'var(--text-dim)', opacity: 0.5 }}
                   title={`Delete ${tool} group`}
                 >🗑️</button>
               </div>
