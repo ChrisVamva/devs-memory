@@ -645,461 +645,7 @@ body {
   margin-bottom: 4px;
 }
 
-/* ── Game Boy Widget ── */
-.gb-widget {
-  position: fixed;
-  bottom: 14px;
-  right: 14px;
-  cursor: pointer;
-  z-index: 50;
-  transform: scale(0.55);
-  transform-origin: bottom right;
-  transition: transform 0.15s;
-  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.25));
-}
 
-.gb-widget:hover {
-  transform: scale(0.6);
-  transform-origin: bottom right;
-}
-
-.gb-widget-controls {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 4px;
-}
-
-.gb-minimise {
-  background: rgba(0,0,0,0.25);
-  border: none;
-  color: #fff;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  font-size: 14px;
-  line-height: 1;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s;
-}
-
-.gb-minimise:hover {
-  background: rgba(0,0,0,0.5);
-}
-
-.gb-pill {
-  position: fixed;
-  bottom: 14px;
-  right: 14px;
-  z-index: 50;
-  background: #c0392b;
-  color: #fff;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  padding: 4px 10px;
-  border-radius: 20px;
-  cursor: pointer;
-  border: 2px solid #922b21;
-  box-shadow: 1px 2px 6px rgba(0,0,0,0.25);
-  transition: transform 0.15s, box-shadow 0.15s;
-  user-select: none;
-}
-
-.gb-pill:hover {
-  transform: scale(1.08);
-  box-shadow: 2px 4px 10px rgba(0,0,0,0.3);
-}
-
-.gb-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(44,36,22,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 300;
-  backdrop-filter: blur(2px);
-}
-
-.gb-panel {
-  position: relative;
-  filter: drop-shadow(0 12px 32px rgba(0,0,0,0.35));
-}
-
-.gb-close {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  background: var(--text-heading);
-  color: var(--bg-card);
-  border: none;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 11px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Game Boy body */
-.gb-body {
-  width: 180px;
-  background: #c0392b;
-  border-radius: 12px 12px 40px 12px;
-  padding: 10px 10px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  border: 2px solid #922b21;
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.15);
-}
-
-.gb-top-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 2px;
-}
-
-.gb-power-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #e74c3c;
-  box-shadow: 0 0 4px #ff6b6b;
-}
-
-.gb-brand {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  font-weight: 700;
-  color: #922b21;
-  letter-spacing: 0.1em;
-}
-
-.gb-screen-bezel {
-  background: #1a1a2e;
-  border-radius: 6px;
-  padding: 8px;
-  border: 2px solid #111;
-}
-
-.gb-screen {
-  background: #9bbc0f;
-  border-radius: 3px;
-  height: 90px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: #0f380f;
-  overflow: hidden;
-  padding: 6px;
-}
-
-.gb-idle-screen {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  color: #0f380f;
-  opacity: 0.7;
-}
-
-.gb-stats-screen {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.gb-stat-row {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.gb-stat-label {
-  font-size: 8px;
-  font-weight: 700;
-  color: #0f380f;
-  width: 24px;
-  flex-shrink: 0;
-}
-
-.gb-bar-track {
-  flex: 1;
-  height: 7px;
-  background: #306230;
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.gb-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.4s ease;
-}
-
-.gb-stat-val {
-  font-size: 8px;
-  font-weight: 700;
-  color: #0f380f;
-  width: 26px;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.gb-stat-detail {
-  font-size: 7px;
-  color: #306230;
-  text-align: center;
-}
-
-.gb-loading {
-  font-size: 8px;
-  color: #306230;
-  animation: gbpulse 1s infinite;
-}
-
-@keyframes gbpulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-.gb-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 4px;
-}
-
-.gb-dpad {
-  position: relative;
-  width: 44px;
-  height: 44px;
-}
-
-.gb-dpad-h, .gb-dpad-v {
-  position: absolute;
-  background: #1a1a1a;
-  border-radius: 2px;
-}
-
-.gb-dpad-h {
-  width: 100%;
-  height: 33%;
-  top: 33%;
-  left: 0;
-}
-
-.gb-dpad-v {
-  width: 33%;
-  height: 100%;
-  top: 0;
-  left: 33%;
-}
-
-.gb-dpad-center {
-  position: absolute;
-  width: 33%;
-  height: 33%;
-  top: 33%;
-  left: 33%;
-  background: #2a2a2a;
-  border-radius: 2px;
-}
-
-.gb-buttons {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.gb-btn {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: #1a1a2e;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 7px;
-  font-weight: 700;
-  color: #555;
-  border: 1px solid #111;
-}
-
-.gb-btn-a { margin-bottom: -8px; }
-.gb-btn-b { margin-top: -8px; }
-
-.gb-start-select {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.gb-ss-btn {
-  background: #922b21;
-  border-radius: 8px;
-  padding: 3px 8px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 6px;
-  color: #c0392b;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-}
-
-.gb-speaker {
-  display: flex;
-  justify-content: flex-end;
-  gap: 3px;
-  padding-right: 6px;
-}
-
-.gb-speaker-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #922b21;
-}
-
-/* ── Notebook icon button ── */
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.notebook-icon-btn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  opacity: 0.6;
-  transition: opacity 0.15s, transform 0.15s;
-  padding: 0;
-  line-height: 1;
-}
-
-.notebook-icon-btn:hover {
-  opacity: 1;
-  transform: rotate(-5deg) scale(1.1);
-}
-
-/* ── Notebook modal ── */
-.notebook-modal {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  width: 340px;
-  max-height: 520px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.22);
-  overflow: hidden;
-  position: relative;
-}
-
-.notebook-rings {
-  display: flex;
-  justify-content: space-around;
-  padding: 0 16px;
-  background: #2a1f14;
-  height: 22px;
-  align-items: flex-end;
-  flex-shrink: 0;
-}
-
-.ring {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 3px solid var(--text-heading);
-  background: #1a1208;
-  margin-bottom: -7px;
-  position: relative;
-  z-index: 2;
-}
-
-.notebook-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px 8px;
-  border-bottom: 2px solid var(--border);
-  flex-shrink: 0;
-}
-
-.notebook-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-code);
-}
-
-.notebook-paper {
-  flex: 1;
-  overflow: hidden;
-  background-image: repeating-linear-gradient(
-    transparent,
-    transparent 27px,
-    var(--border-soft) 28px
-  );
-  background-size: 100% 28px;
-  padding: 4px 0;
-}
-
-.notebook-textarea {
-  width: 100%;
-  height: 320px;
-  background: transparent;
-  border: none;
-  outline: none;
-  resize: none;
-  font-size: 16px;
-  color: var(--text);
-  line-height: 28px;
-  padding: 0 16px;
-  padding-left: 48px;
-  background-image: linear-gradient(to right, transparent 40px, #e8a09044 41px);
-}
-
-.notebook-textarea::placeholder {
-  color: var(--border);
-}
-
-.notebook-footer {
-  display: flex;
-  gap: 8px;
-  padding: 10px 16px;
-  border-top: 1px solid var(--border);
-  background: var(--bg-footer);
-  flex-shrink: 0;
-}
-
-
-/* ── Orange Tomato logo button ── */
-.ot-logo-btn {
-  position: fixed;
-  bottom: 18px;
-  right: 120px;
-  z-index: 50;
-  width: 36px;
-  height: 36px;
-  cursor: pointer;
-  border-radius: 6px;
-  overflow: hidden;
-  opacity: 0.85;
-  transition: opacity 0.15s, transform 0.15s;
-  filter: drop-shadow(1px 2px 4px rgba(0,0,0,0.3));
-}
 
 .ot-logo-btn:hover {
   opacity: 1;
@@ -1112,23 +658,7 @@ body {
   display: block;
 }
 
-.github-btn {
-  right: 164px;
-  background: #24292f;
-  border-radius: 50%;
-}
 
-.github-btn img {
-  filter: invert(1);
-}
-
-body.dark .github-btn {
-  background: #e8dfc8;
-}
-
-body.dark .github-btn img {
-  filter: none;
-}
 
 /* ── Tree View ── */
 .tree-canvas {
@@ -1187,22 +717,108 @@ body.dark .github-btn img {
   cursor: pointer;
 }
 
-/* ── Import / Export modal ── */
-.ie-section {
+/* ── Dashboard Section Mapping ── */
+.dashboard-section {
+  --dash-bg: var(--bg-card);
+  --dash-border: var(--border);
+  --dash-text: var(--text);
+  --dash-text-muted: var(--text-muted);
+  --dash-accent: var(--accent);
+  --dash-accent-soft: var(--accent-light);
+  --dash-radius: 8px;
+  
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.dashboard-section .dash-card {
+  background: var(--dash-bg);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius);
+  padding: 12px;
+  color: var(--dash-text);
+  transition: border-color 0.2s;
+}
+
+.dashboard-section .dash-card:hover {
+  border-color: var(--dash-accent);
+}
+
+.dashboard-section .dash-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+}
+
+.dashboard-section .dash-value {
+  font-size: 11px;
+  color: var(--text-code);
+  background: var(--bg-code);
+  padding: 4px 8px;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+/* ── Mode toggle ── */
+.mode-toggle {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+  padding: 8px 10px 4px;
+  border-bottom: 1px solid var(--border);
 }
 
-.ie-desc {
-  font-size: 14px;
-  color: var(--text-muted);
+.mode-btn {
+  flex: 1;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 4px 6px;
+  font-size: 12px;
   font-family: 'Caveat', cursive;
-  line-height: 1.4;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
-.ie-divider {
-  height: 1px;
-  background: var(--border);
-  margin: 12px 0;
+.mode-btn.active {
+  background: var(--accent-light);
+  color: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
 }
+
+/* ── Shortcut cards ── */
+.shortcut-card .card-label {
+  font-size: 14px;
+}
+
+.shortcut-state-select {
+  border: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-family: 'Caveat', cursive;
+  cursor: pointer;
+  outline: none;
+}
+
+.shortcut-tool-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-family: 'Caveat', cursive;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.shortcut-tool-btn.active,
+.shortcut-tool-btn:hover {
+  background: var(--accent-light);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+

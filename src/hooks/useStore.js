@@ -113,6 +113,8 @@ export function useStore() {
       return merged
     })
   }
+
+  function approveCommand(categoryId, commandId, targetCategoryName) {
     update(prev => {
       const data = prev.map(c => ({ ...c, commands: [...c.commands] }))
       const inbox = data.find(c => c.id === categoryId)
@@ -122,11 +124,13 @@ export function useStore() {
       const { pending, suggestedCategory, reason, ...cleanCmd } = cmd
       const targetName = targetCategoryName || suggestedCategory
       let target = targetName ? data.find(c => c.name.toLowerCase() === targetName.toLowerCase()) : null
-      if (!target) target = inbox // fallback: keep in inbox as approved
+      if (!target) target = inbox
       target.commands.push(cleanCmd)
       return data
     })
   }
+
+  function addCommand(categoryId, label, value) {
     update(prev => prev.map(c =>
       c.id === categoryId
         ? { ...c, commands: [...c.commands, { id: uid(), label, value }] }

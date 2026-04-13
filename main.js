@@ -1,12 +1,10 @@
-const { app, BrowserWindow, session, ipcMain, shell, globalShortcut } = require('electron')
+const { app, BrowserWindow, session, ipcMain } = require('electron')
 const path = require('path')
-const fs = require('fs')
-const os = require('os')
-const si = require('systeminformation')
+const fs   = require('fs')
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 
-// ── Data file path ──
+// ── Data file ──
 const DATA_DIR  = app.getPath('userData')
 const DATA_FILE = path.join(DATA_DIR, 'data.json')
 
@@ -43,47 +41,6 @@ function createWindow() {
   } else {
     win.loadFile(path.join(__dirname, 'dist', 'index.html'))
   }
-
-  win.webContents.once('did-finish-load', () => startWatcher(win))
-}
-
-// ── Spotlight window ──
-let spotlightWin = null
-
-function openSpotlight() {
-  if (spotlightWin && !spotlightWin.isDestroyed()) {
-    spotlightWin.focus()
-    return
-  }
-  spotlightWin = new BrowserWindow({
-    width: 520,
-    height: 380,
-    frame: false,
-    transparent: true,
-    alwaysOnTop: true,
-    resizable: false,
-    skipTaskbar: true,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload-spotlight.js'),
-      contextIsolation: true,
-      nodeIntegration: false
-    }
-  })
-  spotlightWin.loadFile(path.join(__dirname, 'spotlight.html'))
-  spotlightWin.on('blur', () => { if (spotlightWin) spotlightWin.close() })
-  spotlightWin.on('closed', () => { spotlightWin = null })
-
-  // Send data once loaded
-  spotlightWin.webContents.once('did-finish-load', () => {
-    const data = readData() || []
-    const commands = []
-    data.forEach(cat => {
-      cat.commands?.forEach(cmd => {
-        commands.push({ label: cmd.label, value: cmd.value, category: cat.name })
-      })
-    })
-    spotlightWin.webContents.send('spotlight-data', commands)
-  })
 }
 
 app.whenReady().then(() => {
@@ -98,56 +55,13 @@ app.whenReady().then(() => {
     })
   })
 
-  // Block navigation inside the window, open externally instead
-  app.on('web-contents-created', (_, contents) => {
-    contents.setWindowOpenHandler(({ url }) => {
-      shell.openExternal(url)
-      return { action: 'deny' }
-    })
-  })
-
-  ipcMain.handle('open-url', (_, url) => {
-    return shell.openExternal(url)
-  })
-
-  // ── Data IPC ──
-  ipcMain.handle('data-read', () => readData())
+  ipcMain.handle('data-read',  ()        => readData())
   ipcMain.handle('data-write', (_, data) => { writeData(data); return true })
-  ipcMain.handle('data-path', () => DATA_FILE)
-
-  // ── File watcher — push external changes (MCP) to renderer ──
-  let watcher = null
-  function startWatcher(win) {
-    if (watcher) return
-    fs.mkdirSync(DATA_DIR, { recursive: true })
-    if (!fs.existsSync(DATA_FILE)) writeData([])
-    watcher = fs.watch(DATA_FILE, () => {
-      const data = readData()
-      if (data) win.webContents.send('data-changed', data)
-    })
-  }
-
-  ipcMain.handle('get-system-stats', async () => {
-    const totalMem = os.totalmem()
-    const freeMem  = os.freemem()
-    const usedMem  = totalMem - freeMem
-    const cpu = await si.currentLoad()
-    return {
-      cpu: Math.round(cpu.currentLoad),
-      ramUsed: Math.round(usedMem / 1024 / 1024),
-      ramTotal: Math.round(totalMem / 1024 / 1024),
-      ramPercent: Math.round((usedMem / totalMem) * 100)
-    }
-  })
 
   createWindow()
-
-  globalShortcut.register('CommandOrControl+Shift+M', openSpotlight)
-  ipcMain.on('spotlight-close', () => { if (spotlightWin) spotlightWin.close() })
 })
 
 app.on('window-all-closed', () => {
-  globalShortcut.unregisterAll()
   if (process.platform !== 'darwin') app.quit()
 })
 

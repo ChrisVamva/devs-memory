@@ -6,18 +6,60 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "start": "node electron-dev.js"
+    "start": "node electron-dev.js",
+    "dist": "vite build && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win"
+  },
+  "build": {
+    "appId": "com.orangetomato.devsmemory",
+    "productName": "Dev's Memory",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "main.js",
+      "preload.js",
+      "preload-spotlight.js",
+      "spotlight.html",
+      "public/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "mcp-server",
+        "to": "mcp-server",
+        "filter": [
+          "**/*",
+          "!node_modules"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable"
+        }
+      ],
+      "forceCodeSigning": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "systeminformation": "^5.31.5"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",
     "concurrently": "^8.0.0",
     "cross-env": "^10.1.0",
     "electron": "^28.0.0",
+    "electron-builder": "^26.8.1",
     "vite": "^5.0.0",
     "wait-on": "^9.0.4"
   }

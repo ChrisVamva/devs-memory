@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import Sidebar from './components/Sidebar'
 import CommandList from './components/CommandList'
-import GameBoy from './components/GameBoy'
 import ImportExport from './components/ImportExport'
+import ShortcutsView from './components/ShortcutsView'
 import { useStore } from './hooks/useStore'
+import { useShortcuts } from './hooks/useShortcuts'
 
 export default function App() {
   const { categories, addCategory, renameCategory, deleteCategory, styleCategory, updateNote, approveCommand, importData, addCommand, updateCommand, deleteCommand } = useStore()
+  const { shortcuts, tools, addShortcut, updateShortcut, deleteShortcut, toggleFavorite, setState, addTool, deleteTool } = useShortcuts()
   const [selectedId, setSelectedId] = useState(categories[0]?.id || null)
   const [dark, setDark] = useState(() => localStorage.getItem('devs-memory-theme') === 'dark')
   const [showIE, setShowIE] = useState(false)
+  const [mode, setMode] = useState('commands') // 'commands' | 'shortcuts'
 
   useEffect(() => {
     document.body.classList.toggle('dark', dark)
@@ -39,17 +42,32 @@ export default function App() {
         dark={dark}
         onToggleDark={() => setDark(d => !d)}
         onImportExport={() => setShowIE(true)}
+        mode={mode}
+        onModeChange={setMode}
       />
-      <CommandList
-        category={selectedCategory}
-        allCategories={categories}
-        onAdd={addCommand}
-        onUpdate={updateCommand}
-        onDelete={deleteCommand}
-        onSaveNote={updateNote}
-        onApprove={cmd => approveCommand(selectedCategory.id, cmd.id, cmd.suggestedCategory)}
-      />
-      <GameBoy />
+      {mode === 'commands' ? (
+        <CommandList
+          category={selectedCategory}
+          allCategories={categories}
+          onAdd={addCommand}
+          onUpdate={updateCommand}
+          onDelete={deleteCommand}
+          onSaveNote={updateNote}
+          onApprove={cmd => selectedCategory && approveCommand(selectedCategory.id, cmd.id, cmd.suggestedCategory)}
+        />
+      ) : (
+        <ShortcutsView
+          shortcuts={shortcuts}
+          tools={tools}
+          onAdd={addShortcut}
+          onUpdate={updateShortcut}
+          onDelete={deleteShortcut}
+          onToggleFavorite={toggleFavorite}
+          onSetState={setState}
+          onAddTool={addTool}
+          onDeleteTool={deleteTool}
+        />
+      )}
       {showIE && (
         <ImportExport
           categories={categories}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import StyleModal from './StyleModal'
 
-export default function Sidebar({ categories, selected, onSelect, onAdd, onRename, onDelete, onStyle, dark, onToggleDark, onImportExport }) {
+export default function Sidebar({ categories, selected, onSelect, onAdd, onRename, onDelete, onStyle, dark, onToggleDark, onImportExport, mode, onModeChange }) {
   const [newName, setNewName] = useState('')
   const [editingId, setEditingId] = useState(null)
   const [editValue, setEditValue] = useState('')
@@ -35,7 +35,13 @@ export default function Sidebar({ categories, selected, onSelect, onAdd, onRenam
         </button>
       </div>
 
-      <nav className="category-list">
+      {/* Mode toggle */}
+      <div className="mode-toggle">
+        <button className={`mode-btn ${mode === 'commands' ? 'active' : ''}`} onClick={() => onModeChange('commands')}>Commands</button>
+        <button className={`mode-btn ${mode === 'shortcuts' ? 'active' : ''}`} onClick={() => onModeChange('shortcuts')}>Shortcuts</button>
+      </div>
+
+      <nav className="category-list" style={{ display: mode === 'shortcuts' ? 'none' : undefined }}>
         {categories.map(cat => {
           const s = cat.style || {}
           return (
@@ -100,8 +106,10 @@ export default function Sidebar({ categories, selected, onSelect, onAdd, onRenam
             <button onClick={handleAdd}>Add</button>
           </div>
         ) : (
-          <button className="add-category-btn" onClick={() => setAdding(true)}>+ New Category</button>
-        <button className="add-category-btn" style={{ marginTop: 4 }} onClick={onImportExport}>⇅ Import / Export</button>
+          <>
+            <button className="add-category-btn" onClick={() => setAdding(true)}>+ New Category</button>
+            <button className="add-category-btn" style={{ marginTop: 4 }} onClick={onImportExport}>⇅ Import / Export</button>
+          </>
         )}
       </div>
 
