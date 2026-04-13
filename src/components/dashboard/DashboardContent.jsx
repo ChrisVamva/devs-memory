@@ -7,9 +7,9 @@ export function DashboardContent() {
       <header className="flex items-center justify-between mb-6 border-b border-border pb-4">
         <div>
           <h1 className="text-xl font-semibold text-text-heading">Shortcut Dashboard</h1>
-          <p className="text-xs text-text-muted">Quick reference for system leverage</p>
+          <p className="text-sm text-text-muted">Quick reference for system leverage</p>
         </div>
-        <div className="text-[10px] bg-accent-light px-2 py-1 rounded text-text-code">
+        <div className="text-xs bg-accent-light px-2 py-1 rounded text-text-code">
           {SHORTCUTS.length} Active
         </div>
       </header>
@@ -20,8 +20,8 @@ export function DashboardContent() {
             <div className="dash-label">{shortcut.label}</div>
             <div className="dash-value">{shortcut.value}</div>
             <div className="flex justify-between items-center mt-2">
-              <span className="text-[9px] text-text-dim uppercase">{shortcut.leverage} leverage</span>
-              <span className="text-[9px] px-1.5 py-0.5 rounded bg-border-soft text-text-muted">{shortcut.state}</span>
+              <span className="text-[11px] text-text-dim uppercase">{shortcut.leverage} leverage</span>
+              <span className="text-[11px] px-1.5 py-0.5 rounded bg-border-soft text-text-muted">{shortcut.state}</span>
             </div>
           </div>
         ))}

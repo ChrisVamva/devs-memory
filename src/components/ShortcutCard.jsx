@@ -37,7 +37,7 @@ export default function ShortcutCard({ shortcut, onUpdate, onDelete, onToggleFav
           value={keys}
           onChange={e => setKeys(e.target.value)}
           placeholder="Keys e.g. Ctrl + Shift + P"
-          style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px' }}
+          style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '14px' }}
         />
         <div className="card-edit-actions">
           <button className="btn-save" onClick={handleSave}>Save</button>
@@ -81,7 +81,7 @@ export default function ShortcutCard({ shortcut, onUpdate, onDelete, onToggleFav
         </select>
         <span style={{
           fontFamily: "'JetBrains Mono', monospace",
-          fontSize: '10px',
+          fontSize: '12px',
           color: 'var(--text-muted)',
           background: 'var(--bg-code)',
           padding: '1px 6px',

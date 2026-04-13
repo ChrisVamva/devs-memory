@@ -9,9 +9,9 @@ const KEY_SYMBOLS = {
 export function Keycap({ label, size = 'md' }) {
   const display = KEY_SYMBOLS[label] || label
   const sizes = {
-    sm: { fontSize: '10px', padding: '1px 5px', minWidth: '18px', height: '18px' },
-    md: { fontSize: '12px', padding: '2px 7px', minWidth: '22px', height: '22px' },
-    lg: { fontSize: '14px', padding: '3px 10px', minWidth: '28px', height: '28px' },
+    sm: { fontSize: '12px', padding: '2px 6px', minWidth: '22px', height: '22px' },
+    md: { fontSize: '14px', padding: '3px 8px', minWidth: '26px', height: '26px' },
+    lg: { fontSize: '16px', padding: '4px 11px', minWidth: '32px', height: '32px' },
   }
   return (
     <span style={{
@@ -41,7 +41,7 @@ export function KeyCombo({ keys, size = 'md' }) {
         <React.Fragment key={i}>
           <Keycap label={k} size={size} />
           {i < keys.length - 1 && (
-            <span style={{ fontSize: '10px', color: 'var(--text-dim)', fontFamily: 'monospace' }}>+</span>
+            <span style={{ fontSize: '12px', color: 'var(--text-dim)', fontFamily: 'monospace' }}>+</span>
           )}
         </React.Fragment>
       ))}

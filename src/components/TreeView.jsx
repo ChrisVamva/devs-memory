@@ -1,9 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
 
-const NODE_W = 160
-const NODE_H = 40
-const CMD_W  = 150
-const CMD_H  = 36
+const NODE_W = 180
+const NODE_H = 46
+const CMD_W  = 170
+const CMD_H  = 42
 
 function useNodePositions(categories) {
   const [positions, setPositions] = useState({})
@@ -151,7 +151,7 @@ export default function TreeView({ categories, onCopy }) {
                   y={NODE_H / 2 + 6}
                   textAnchor="middle"
                   fontFamily={catFont}
-                  fontSize="15"
+                  fontSize="18"
                   fontWeight="600"
                   fill={catColor ? '#1a1208' : 'var(--text-heading)'}
                 >
@@ -185,9 +185,9 @@ export default function TreeView({ categories, onCopy }) {
                     {/* Label */}
                     <text
                       x="8"
-                      y="13"
+                      y="15"
                       fontFamily={cs.font || "'Caveat', cursive"}
-                      fontSize="11"
+                      fontSize="14"
                       fontWeight="600"
                       fill="var(--text-heading)"
                     >
@@ -196,9 +196,9 @@ export default function TreeView({ categories, onCopy }) {
                     {/* Value */}
                     <text
                       x="8"
-                      y="27"
+                      y="31"
                       fontFamily="'JetBrains Mono', monospace"
-                      fontSize="9"
+                      fontSize="11"
                       fill="var(--text-code)"
                     >
                       {cmd.value.length > 20 ? cmd.value.slice(0, 20) + '…' : cmd.value}
@@ -213,7 +213,7 @@ export default function TreeView({ categories, onCopy }) {
                       <text
                         x="11" y="14"
                         textAnchor="middle"
-                        fontSize="9"
+                        fontSize="11"
                         fontFamily="'JetBrains Mono', monospace"
                         fill={isCopied ? '#4a7a3a' : 'var(--accent)'}
                       >
