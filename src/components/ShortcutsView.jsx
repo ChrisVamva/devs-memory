@@ -27,7 +27,15 @@ export default function ShortcutsView({ shortcuts, tools, onAdd, onUpdate, onDel
 
   function handleAdd() {
     if (!newKeys.trim() || !newAction.trim()) return
-    const parsedKeys = newKeys.split('+').map(k => k.trim()).filter(Boolean)
+    // Normalize: split by '+' and normalize each key (lowercase except modifiers)
+    const parsedKeys = newKeys.split('+').map(k => {
+      const key = k.trim().toLowerCase()
+      // Keep these uppercase
+      if (['ctrl', 'alt', 'shift', 'cmd', 'command', 'meta'].includes(key)) {
+        return key === 'cmd' ? 'Ctrl' : key.charAt(0).toUpperCase() + key.slice(1)
+      }
+      return key.charAt(0).toUpperCase() + key.slice(1)
+    }).filter(Boolean)
     onAdd(parsedKeys, newAction.trim(), newTool)
     setNewKeys(''); setNewAction(''); setAdding(false)
   }
@@ -82,11 +90,13 @@ export default function ShortcutsView({ shortcuts, tools, onAdd, onUpdate, onDel
             value={newAction}
             autoFocus
             onChange={e => setNewAction(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Escape') setAdding(false) }}
           />
           <input
             placeholder="Keys (e.g. Ctrl + Shift + P)"
             value={newKeys}
             onChange={e => setNewKeys(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Escape') setAdding(false) }}
             style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '13px' }}
           />
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>

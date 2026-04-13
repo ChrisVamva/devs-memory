@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Sidebar from './components/Sidebar'
 import CommandList from './components/CommandList'
 import ImportExport from './components/ImportExport'
@@ -6,14 +6,31 @@ import ShortcutsView from './components/ShortcutsView'
 import { useStore } from './hooks/useStore'
 import { useShortcuts } from './hooks/useShortcuts'
 
+// Get initial theme from localStorage synchronously to avoid flash
+const getInitialTheme = () => {
+  try {
+    return localStorage.getItem('devs-memory-theme') === 'dark'
+  } catch {
+    return false
+  }
+}
+
 export default function App() {
-  const { categories, addCategory, renameCategory, deleteCategory, styleCategory, updateNote, approveCommand, importData, addCommand, updateCommand, deleteCommand } = useStore()
+  const { categories, addCategory, renameCategory, deleteCategory, styleCategory, updateNote, approveCommand, importData, addCommand, updateCommand, deleteCommand, addSubcategory, deleteSubcategory } = useStore()
   const { shortcuts, tools, addShortcut, updateShortcut, deleteShortcut, toggleFavorite, setState, addTool, deleteTool } = useShortcuts()
-  const [selectedId, setSelectedId] = useState(categories[0]?.id || null)
-  const [dark, setDark] = useState(() => localStorage.getItem('devs-memory-theme') === 'dark')
+  const [selectedId, setSelectedId] = useState(null)
+  const [dark, setDark] = useState(getInitialTheme)
   const [showIE, setShowIE] = useState(false)
   const [mode, setMode] = useState('commands') // 'commands' | 'shortcuts'
 
+  // Initialize selectedId after categories load
+  useEffect(() => {
+    if (categories.length > 0 && selectedId === null) {
+      setSelectedId(categories[0].id)
+    }
+  }, [categories, selectedId])
+
+  // Apply theme when dark changes
   useEffect(() => {
     document.body.classList.toggle('dark', dark)
     localStorage.setItem('devs-memory-theme', dark ? 'dark' : 'light')
@@ -52,7 +69,8 @@ export default function App() {
           onAdd={addCommand}
           onUpdate={updateCommand}
           onDelete={deleteCommand}
-          onSaveNote={updateNote}
+          onAddSubcategory={addSubcategory}
+          onDeleteSubcategory={deleteSubcategory}
           onApprove={cmd => selectedCategory && approveCommand(selectedCategory.id, cmd.id, cmd.suggestedCategory)}
         />
       ) : (

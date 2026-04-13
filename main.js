@@ -1,4 +1,5 @@
 const { app, BrowserWindow, session, ipcMain } = require('electron')
+const { writeFileSync, renameSync, mkdirSync } = require('fs')
 const path = require('path')
 const fs   = require('fs')
 
@@ -16,8 +17,15 @@ function readData() {
 }
 
 function writeData(data) {
-  fs.mkdirSync(DATA_DIR, { recursive: true })
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8')
+  mkdirSync(DATA_DIR, { recursive: true })
+  // Atomic write: write to temp file, then rename
+  const tmpFile = DATA_FILE + '.tmp'
+  writeFileSync(tmpFile, JSON.stringify(data, null, 2), 'utf8')
+  renameSync(tmpFile, DATA_FILE)
+  // Notify all windows of data change
+  BrowserWindow.getAllWindows().forEach(win => {
+    win.webContents.send('data-changed', data)
+  })
 }
 
 function createWindow() {

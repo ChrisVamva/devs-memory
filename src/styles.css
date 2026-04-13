@@ -517,14 +517,19 @@ body {
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--bg-code);
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 2px;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
 }
 
 /* ── Style Modal ── */
@@ -715,48 +720,6 @@ body {
   font-family: 'Caveat', cursive;
   font-weight: 600;
   cursor: pointer;
-}
-
-/* ── Dashboard Section Mapping ── */
-.dashboard-section {
-  --dash-bg: var(--bg-card);
-  --dash-border: var(--border);
-  --dash-text: var(--text);
-  --dash-text-muted: var(--text-muted);
-  --dash-accent: var(--accent);
-  --dash-accent-soft: var(--accent-light);
-  --dash-radius: 8px;
-  
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.dashboard-section .dash-card {
-  background: var(--dash-bg);
-  border: 1px solid var(--dash-border);
-  border-radius: var(--dash-radius);
-  padding: 12px;
-  color: var(--dash-text);
-  transition: border-color 0.2s;
-}
-
-.dashboard-section .dash-card:hover {
-  border-color: var(--dash-accent);
-}
-
-.dashboard-section .dash-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-heading);
-  margin-bottom: 4px;
-}
-
-.dashboard-section .dash-value {
-  font-size: 11px;
-  color: var(--text-code);
-  background: var(--bg-code);
-  padding: 4px 8px;
-  border-radius: 4px;
-  word-break: break-all;
 }
 
 /* ── Mode toggle ── */

@@ -1,21 +1,27 @@
 import React, { useState } from 'react'
 import CommandCard from './CommandCard'
-import NoteModal from './NoteModal'
-import TreeView from './TreeView'
 
-export default function CommandList({ category, onAdd, onUpdate, onDelete, onSaveNote, onApprove, allCategories }) {
-  const [adding, setAdding] = useState(false)
+export default function CommandList({ category, onAdd, onUpdate, onDelete, onApprove, onAddSubcategory, onDeleteSubcategory }) {
+  const [addingTo, setAddingTo] = useState(null)
+  const [addingSubRef, setAddingSubRef] = useState(false)
   const [label, setLabel] = useState('')
   const [value, setValue] = useState('')
-  const [noteOpen, setNoteOpen] = useState(false)
-  const [treeView, setTreeView] = useState(false)
+  const [subName, setSubName] = useState('')
 
   function handleAdd() {
     if (label.trim() && value.trim()) {
-      onAdd(category.id, label.trim(), value.trim())
+      onAdd(category.id, label.trim(), value.trim(), addingTo === '_default' ? undefined : addingTo)
       setLabel('')
       setValue('')
-      setAdding(false)
+      setAddingTo(null)
+    }
+  }
+
+  function handleAddSubcategory() {
+    if (subName.trim()) {
+      onAddSubcategory(category.id, subName.trim())
+      setSubName('')
+      setAddingSubRef(false)
     }
   }
 
@@ -26,6 +32,23 @@ export default function CommandList({ category, onAdd, onUpdate, onDelete, onSav
       </main>
     )
   }
+
+  const subcategories = category.subcategories || []
+  const grouped = { _default: [] }
+  subcategories.forEach(sub => grouped[sub] = [])
+  category.commands.forEach(cmd => {
+    const s = cmd.subcategory
+    if (s && grouped[s]) {
+      grouped[s].push(cmd)
+    } else {
+      grouped._default.push(cmd)
+    }
+  })
+
+  // Which sections to render: if there are no subcategories, just render '_default'
+  const sections = subcategories.length > 0
+    ? ['_default', ...subcategories].filter(sub => sub !== '_default' || grouped[sub].length > 0 || addingTo === '_default')
+    : ['_default']
 
   return (
     <main className="command-list">
@@ -39,73 +62,90 @@ export default function CommandList({ category, onAdd, onUpdate, onDelete, onSav
             color: category.style?.color ? '#1a1208' : undefined,
             display: 'inline-block'
           }}>{category.name}</h2>
-          <button
-            className="notebook-icon-btn"
-            title="Open notebook"
-            onClick={() => setNoteOpen(true)}
-          >
-            📓
-          </button>
-          <button
-            className="notebook-icon-btn"
-            title={treeView ? 'Card view' : 'Tree view'}
-            onClick={() => setTreeView(v => !v)}
-          >
-            {treeView ? '▦' : '🌿'}
-          </button>
         </div>
-        <button className="add-command-btn" onClick={() => setAdding(true)}>+ Add Command</button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button className="add-command-btn" onClick={() => setAddingSubRef(true)}>+ Add Side Category</button>
+          {subcategories.length === 0 && (
+            <button className="add-command-btn" onClick={() => setAddingTo('_default')}>+ Add Command</button>
+          )}
+        </div>
       </div>
 
-      {adding && (
+      {addingSubRef && (
         <div className="add-command-form">
           <input
-            placeholder="Label (e.g. Push to main)"
-            value={label}
+            placeholder="Side Category Name (e.g. Branching)"
+            value={subName}
             autoFocus
-            onChange={e => setLabel(e.target.value)}
-          />
-          <textarea
-            placeholder="Command (e.g. git push origin main)"
-            value={value}
-            rows={3}
-            onChange={e => setValue(e.target.value)}
+            onChange={e => setSubName(e.target.value)}
           />
           <div className="form-actions">
-            <button className="btn-save" onClick={handleAdd}>Add</button>
-            <button className="btn-cancel" onClick={() => { setAdding(false); setLabel(''); setValue('') }}>Cancel</button>
+            <button className="btn-save" onClick={handleAddSubcategory}>Add</button>
+            <button className="btn-cancel" onClick={() => { setAddingSubRef(false); setSubName('') }}>Cancel</button>
           </div>
         </div>
       )}
 
-      {treeView ? (
-        <TreeView categories={allCategories || [category]} />
-      ) : (
-        <div className="cards-grid">
-          {category.commands.length === 0 && !adding && (
-            <p className="no-commands">No commands yet. Hit "+ Add Command" to start.</p>
-          )}
-          {category.commands.map(cmd => (
-            <CommandCard
-              key={cmd.id}
-              command={cmd}
-              categoryId={category.id}
-              contentStyle={category.contentStyle || {}}
-              onUpdate={onUpdate}
-              onDelete={onDelete}
-              onApprove={onApprove}
-            />
-          ))}
-        </div>
-      )}
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+        {sections.map(sub => (
+          <div key={sub} style={{ marginBottom: sections.length > 1 ? '24px' : '0' }}>
+            {sections.length > 1 && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'space-between', marginBottom: '12px', borderBottom: '1px solid var(--border)', paddingBottom: '4px' }}>
+                <h3 style={{ fontSize: '18px', color: 'var(--text-heading)' }}>
+                  {sub === '_default' ? 'General' : sub}
+                </h3>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button className="add-command-btn" style={{ padding: '2px 8px', fontSize: '12px' }} onClick={() => setAddingTo(sub)}>+ Add</button>
+                  {sub !== '_default' && (
+                    <button title="Delete Category" onClick={() => onDeleteSubcategory(category.id, sub)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '14px' }}>🗑️</button>
+                  )}
+                </div>
+              </div>
+            )}
 
-      {noteOpen && (
-        <NoteModal
-          category={category}
-          onSave={onSaveNote}
-          onClose={() => setNoteOpen(false)}
-        />
-      )}
+            {addingTo === sub && (
+              <div className="add-command-form">
+                <input
+                  placeholder="Label (e.g. Push to main)"
+                  value={label}
+                  autoFocus
+                  onChange={e => setLabel(e.target.value)}
+                />
+                <textarea
+                  placeholder="Command (e.g. git push origin main)"
+                  value={value}
+                  rows={3}
+                  onChange={e => setValue(e.target.value)}
+                />
+                <div className="form-actions">
+                  <button className="btn-save" onClick={handleAdd}>Add</button>
+                  <button className="btn-cancel" onClick={() => { setAddingTo(null); setLabel(''); setValue('') }}>Cancel</button>
+                </div>
+              </div>
+            )}
+
+            <div className="cards-grid" style={{ overflowY: 'visible', paddingBottom: '4px' }}>
+              {grouped[sub].length === 0 && addingTo !== sub && sections.length === 1 && (
+                <p className="no-commands">No commands yet. Hit "+ Add Command" to start.</p>
+              )}
+              {grouped[sub].length === 0 && addingTo !== sub && sections.length > 1 && (
+                <p className="no-commands" style={{ paddingTop: '0', gridColumn: '1 / -1', opacity: 0.5 }}>No commands in this category.</p>
+              )}
+              {grouped[sub].map(cmd => (
+                <CommandCard
+                  key={cmd.id}
+                  command={cmd}
+                  categoryId={category.id}
+                  contentStyle={category.contentStyle || {}}
+                  onUpdate={onUpdate}
+                  onDelete={onDelete}
+                  onApprove={onApprove}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
     </main>
   )
 }

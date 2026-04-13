@@ -11,7 +11,11 @@ const DEFAULT_SHORTCUTS = [
   { id: 's4', keys: ['git', 'log', '--oneline'], action: 'Compact log', tool: 'Git',     state: 'learning', favorite: false, note: '' },
 ]
 
-function uid() { return Math.random().toString(36).slice(2, 9) }
+function uid() {
+  const arr = new Uint8Array(9)
+  crypto.getRandomValues(arr)
+  return Array.from(arr, b => b.toString(16).padStart(2, '0')).join('').slice(0, 9)
+}
 
 async function loadShortcuts() {
   try {

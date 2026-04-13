@@ -5,10 +5,11 @@ const DEFAULT_DATA = [
     id: '1',
     name: 'Git',
     commands: [
-      { id: '1a', label: 'Status',       value: 'git status' },
-      { id: '1b', label: 'Push',         value: 'git push origin main' },
-      { id: '1c', label: 'Pull',         value: 'git pull' },
+      { id: '1a', label: 'Status',       value: 'git status', subcategory: 'Local' },
+      { id: '1b', label: 'Push',         value: 'git push origin main', subcategory: 'Remote' },
+      { id: '1c', label: 'Pull',         value: 'git pull', subcategory: 'Remote' },
     ],
+    subcategories: ['Local', 'Remote'],
     style: {}, note: ''
   },
   {
@@ -18,12 +19,16 @@ const DEFAULT_DATA = [
       { id: '2a', label: 'List containers', value: 'docker ps -a' },
       { id: '2b', label: 'Stop all',        value: 'docker stop $(docker ps -q)' },
     ],
+    subcategories: [],
     style: {}, note: ''
   }
 ]
 
 function uid() {
-  return Math.random().toString(36).slice(2, 9)
+  // Use crypto.getRandomValues for better uniqueness than Math.random()
+  const arr = new Uint8Array(9)
+  crypto.getRandomValues(arr)
+  return Array.from(arr, b => b.toString(16).padStart(2, '0')).join('').slice(0, 9)
 }
 
 async function loadFromDisk() {
@@ -53,9 +58,13 @@ export function useStore() {
 
   // Listen for external changes (MCP server writes)
   useEffect(() => {
-    window.electronAPI?.onDataChanged(data => {
+    if (!window.electronAPI?.onDataChanged) return
+    const handler = (data) => {
       if (Array.isArray(data)) setCategories(data)
-    })
+    }
+    window.electronAPI.onDataChanged(handler)
+    // Cleanup: unsubscribe when component unmounts
+    return () => window.electronAPI?.offDataChanged?.(handler)
   }, [])
 
   // Persist on every change (after initial load)
@@ -71,7 +80,19 @@ export function useStore() {
   const update = useCallback(fn => setCategories(prev => fn(prev)), [])
 
   function addCategory(name) {
-    update(prev => [...prev, { id: uid(), name, commands: [], style: {}, note: '' }])
+    update(prev => [...prev, { id: uid(), name, commands: [], subcategories: [], style: {}, note: '' }])
+  }
+
+  function addSubcategory(categoryId, name) {
+    update(prev => prev.map(c => c.id === categoryId ? { ...c, subcategories: [...(c.subcategories || []), name] } : c))
+  }
+
+  function deleteSubcategory(categoryId, name) {
+    update(prev => prev.map(c => c.id === categoryId ? { 
+      ...c, 
+      subcategories: (c.subcategories || []).filter(s => s !== name),
+      commands: c.commands.map(cmd => cmd.subcategory === name ? { ...cmd, subcategory: undefined } : cmd)
+    } : c))
   }
 
   function renameCategory(id, name) {
@@ -96,18 +117,38 @@ export function useStore() {
   }
 
   function importData(incoming) {
+    // Validate incoming data structure
+    if (!Array.isArray(incoming)) {
+      console.error('Import failed: expected array')
+      return
+    }
+    const valid = incoming.every(cat => 
+      cat && typeof cat === 'object' && 
+      typeof cat.name === 'string' &&
+      Array.isArray(cat.commands)
+    )
+    if (!valid) {
+      console.error('Import failed: invalid structure')
+      return
+    }
     update(prev => {
       const merged = [...prev]
       incoming.forEach(cat => {
         const existing = merged.find(c => c.name.toLowerCase() === cat.name.toLowerCase())
         if (existing) {
           cat.commands?.forEach(cmd => {
-            if (!existing.commands.find(c => c.label === cmd.label)) {
+            if (cmd && cmd.label && cmd.value && !existing.commands.find(c => c.label === cmd.label)) {
               existing.commands.push({ ...cmd, id: uid() })
             }
           })
         } else {
-          merged.push({ ...cat, id: uid() })
+          merged.push({ 
+            id: uid(), 
+            name: cat.name, 
+            commands: cat.commands?.filter(c => c?.label && c?.value).map(c => ({ ...c, id: uid() })) || [],
+            style: cat.style || {},
+            note: cat.note || ''
+          })
         }
       })
       return merged
@@ -130,18 +171,18 @@ export function useStore() {
     })
   }
 
-  function addCommand(categoryId, label, value) {
+  function addCommand(categoryId, label, value, subcategory) {
     update(prev => prev.map(c =>
       c.id === categoryId
-        ? { ...c, commands: [...c.commands, { id: uid(), label, value }] }
+        ? { ...c, commands: [...c.commands, { id: uid(), label, value, subcategory }] }
         : c
     ))
   }
 
-  function updateCommand(categoryId, commandId, label, value) {
+  function updateCommand(categoryId, commandId, label, value, subcategory) {
     update(prev => prev.map(c =>
       c.id === categoryId
-        ? { ...c, commands: c.commands.map(cmd => cmd.id === commandId ? { ...cmd, label, value } : cmd) }
+        ? { ...c, commands: c.commands.map(cmd => cmd.id === commandId ? { ...cmd, label, value, subcategory: subcategory !== undefined ? subcategory : cmd.subcategory } : cmd) }
         : c
     ))
   }
@@ -157,6 +198,7 @@ export function useStore() {
   return {
     categories,
     addCategory, renameCategory, deleteCategory, styleCategory, updateNote,
+    addSubcategory, deleteSubcategory,
     approveCommand, importData, addCommand, updateCommand, deleteCommand
   }
 }
